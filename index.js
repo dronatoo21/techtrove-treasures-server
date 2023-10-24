@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -42,6 +42,33 @@ async function run() {
         res.send(result);
     })
 
+    app.put('/product/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert : true};
+      const updateProduct = req.body
+      const Product = {
+        $set: {
+          imageUrl: updateProduct.imageUrl,
+          name: updateProduct.name,
+          price: updateProduct.price,
+          type: updateProduct.type,
+          brandName: updateProduct.brandName,
+          ratings : updateProduct.ratings
+        }
+      }
+      const result = await productCollection.updateOne(filter, Product, options)
+      res.send(result)
+
+    })
+
+    app.get('/product/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await productCollection.findOne(query)
+      res.send(result)
+    })
+
     app.get('/brand', async (req, res) => {
         const cursor = brandCollection.find();
         const result = await cursor.toArray();
@@ -49,21 +76,18 @@ async function run() {
         console.log(result);
     })
 
-    // app.get('/brand/:brandName', async (req, res) => {
-    //     const brandName = req.params.brandName;
-    //     const query = {brandName: brandName}
-    //     const newbrand = await brandCollection.findOne(query)
-    //     res.send(newbrand) 
+    // app.get('/details', async (req, res) => {
+    //   const cursor = productCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result)
     // })
 
-  
-    // app.get('/brandproducts/:id', async(req, res) => {
-    //     const id = req.params.id;
-    //     const query = {_id: new ObjectId(id)}
-    //     const result = await productCollection.findOne(query);
-    //     // console.log(id);
-    //     res.send(result);
-    //   })
+    // app.get('/details/:id', async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = {_id : new ObjectId(id)}
+    //   const result = await productCollection.findOne(query) 
+    //   res.send(result)
+    // })
   
 
     // Send a ping to confirm a successful connection
