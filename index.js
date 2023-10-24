@@ -32,7 +32,7 @@ async function run() {
 
     app.post('/product', async (req, res) => {
       const newProduct = req.body;
-      console.log(newProduct);
+      // console.log(newProduct);
       const result = await productCollection.insertOne(newProduct)
       res.send(result) 
     })
@@ -45,7 +45,7 @@ async function run() {
 
     app.post('/cart', async (req, res) => {
       const newProduct = req.body;
-      console.log(newProduct);
+      // console.log(newProduct);
       const result = await cartCollection.insertOne(newProduct)
       res.send(result) 
     })
@@ -87,22 +87,16 @@ async function run() {
         const cursor = brandCollection.find();
         const result = await cursor.toArray();
         res.send(result);
-        console.log(result);
+        // console.log(result);
     })
 
-    // app.get('/details', async (req, res) => {
-    //   const cursor = productCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result)
-    // })
-
-    // app.get('/product/:id', async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = {_id : new ObjectId(id)}
-    //   const result = await productCollection.findOne(query) 
-    //   res.send(result)
-    // }) 
-  
+   app.delete('/cart/:id', async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+      const query = { _id: new ObjectId(id)}
+      const result = await cartCollection.deleteOne(query)
+      res.send(result)
+   })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -116,7 +110,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('server is running')
+    res.send('server is running') 
 })
 
 
