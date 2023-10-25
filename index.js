@@ -43,12 +43,12 @@ async function run() {
       res.send(result);
     })
 
-    app.post('/cart', async (req, res) => {
-      const newProduct = req.body;
-      // console.log(newProduct);
-      const result = await cartCollection.insertOne(newProduct)
-      res.send(result) 
-    })
+    // app.post('/cart', async (req, res) => {
+    //   const newProduct = req.body;
+    //   // console.log(newProduct);
+    //   const result = await cartCollection.insertOne(newProduct)
+    //   res.send(result) 
+    // })
 
     app.get('/product', async (req, res) => {
         const cursor = productCollection.find();
