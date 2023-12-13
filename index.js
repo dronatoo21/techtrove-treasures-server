@@ -43,6 +43,15 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/usersCart', async (req, res) => {
+      let query = {};
+      if (req.query?.usersCart){
+        query = { usersCart: req.query?.usersCart }
+      }
+      const result = await cartCollection.find(query).toArray();
+      res.send(result); 
+    })
+
     app.post('/cart', async (req, res) => {
       const newProduct = req.body;
       // console.log(newProduct);
